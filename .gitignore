@@ -1,1 +1,5 @@
-mit-bih
+mit-bih/*
+!mit-bih/101.atr
+!mit-bih/101.dat
+!mit-bih/101.hea
+!mit-bih/101.xws
