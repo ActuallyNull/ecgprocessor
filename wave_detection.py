@@ -13,10 +13,10 @@ def bandpass_filter(signal, fs, lowcut=0.5, highcut=40, order=2):
 # --- Load ECG record ---
 record = wfdb.rdrecord("mit-bih/101")
 fs = record.fs  # Sampling frequency (360 Hz)
-p_signal = record.p_signal[:, 0]  # Use MLII (Lead II)
+p_signal = record.p_signal[:, 0]  # Uses MLII (Lead II)
 duration = 5  # Duration in seconds to process
 samples = fs * duration
-ecg_raw = p_signal[:samples]
+ecg_raw = p_signal[:samples] # Limit to the first 5 seconds
 
 # --- Filter ECG signal ---
 ecg_filtered = bandpass_filter(ecg_raw, fs)
@@ -29,7 +29,13 @@ signals, waves = nk.ecg_delineate(ecg_filtered,
                                   rpeaks=rpeaks['ECG_R_Peaks'],
                                   sampling_rate=fs,
                                   method="dwt",
-                                  show=False)
+                                  show=True,
+                                  show_type="peaks",)
+
+plot = nk.events_plot([waves['ECG_T_Peaks'][:5], 
+                       waves['ECG_P_Peaks'][:5],
+                       waves['ECG_Q_Peaks'][:5],
+                       waves['ECG_S_Peaks'][:5]], ecg_filtered[:5 * fs])
 
 # --- Plot ECG with PQRST annotations ---
 plt.figure(figsize=(15, 5))
@@ -54,10 +60,11 @@ for wave, color in wave_types.items():
         locs = locs[~np.isnan(locs)].astype(int)
         plt.plot(locs, ecg_filtered[locs], 'o', color=color, label=wave)
 
-plt.title('ECG Signal with Detected PQRST Waves (First 10 Seconds)')
+plt.title(f'ECG Signal with Detected PQRST Waves (First {duration} Seconds)')
 plt.xlabel('Sample Index')
 plt.ylabel('Amplitude')
 plt.legend()
-plt.grid(True)
+plt.grid(visible=True, which='major')
+plt.grid(visible=True, which='minor')
 plt.tight_layout()
 plt.show()
