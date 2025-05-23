@@ -4,12 +4,12 @@ from scipy.signal import find_peaks, butter, filtfilt
 import wfdb
 
 # --- Load ECG file ---
-record = wfdb.rdrecord("mit-bih/101")  # MIT-BIH example
+record = wfdb.rdrecord("mit-bih/106")  # MIT-BIH example
 fs = record.fs
 signal = record.p_signal[:, 0]
 
 # Optional: limit to first 10 seconds
-duration_sec = 2
+duration_sec = 240
 samples = fs * duration_sec
 signal = signal[:samples]
 

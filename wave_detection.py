@@ -14,7 +14,7 @@ def bandpass_filter(signal, fs, lowcut=0.5, highcut=40, order=2):
 record = wfdb.rdrecord("mit-bih/101")
 fs = record.fs  # Sampling frequency (360 Hz)
 p_signal = record.p_signal[:, 0]  # Uses MLII (Lead II)
-duration = 5  # Duration in seconds to process
+duration = 240  # Duration in seconds to process
 samples = fs * duration
 ecg_raw = p_signal[:samples] # Limit to the first 5 seconds
 
